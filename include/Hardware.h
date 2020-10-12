@@ -28,6 +28,16 @@
 namespace hardware
 {
     /**
+     * Defines a pixel count.
+     */
+    typedef uint8_t pixels_t;
+
+    /**
+     * Defines a microsecond type.
+     */
+    typedef uint16_t microseconds_t;
+
+    /**
      * Defines the pin for the first button.
      */
     constexpr uint8_t BUTTON_1_PIN = 0;
@@ -50,7 +60,7 @@ namespace hardware
     /**
      * Defines the pin for the potentiometer.
      */
-    constexpr uint8_t POTENTIOMETER_PIN = 4;
+    constexpr uint8_t POTENTIOMETER_PIN = A3;
 
     /**
      * Defines the pin for the servo.
@@ -66,6 +76,41 @@ namespace hardware
      * Defines the pin for the LCD clock.
      */
     constexpr uint8_t LCD_CLOCK_PIN = A5;
+
+    /**
+     * Defines the I²C address of the LCD.
+     */
+    constexpr uint8_t LCD_I2C_ADDRESS = 0x78;
+
+    /**
+     * Defines the height of the LCD screen.
+     */
+    constexpr pixels_t LCD_HEIGHT = 128;
+
+    /**
+     * Defines the height of the LCD screen.
+     */
+    constexpr pixels_t LCD_WIDTH = 64;
+
+    /**
+     * Defines the lower bound of the pulse width for the servo.
+     */
+    constexpr microseconds_t SERVO_MIN_PULSE_WIDTH = 650;
+
+    /**
+     * Defines the upper bound of the pulse width for the servo.
+     */
+    constexpr microseconds_t SERVO_MAX_PULSE_WIDTH = 2550;
+
+    /**
+     * Defines the minimum angle the servo can reach.
+     */
+    constexpr double SERVO_MIN_ANGLE = 0.0;
+
+    /**
+     * Defines the maximum angle the servo can reach.
+     */
+    constexpr double SERVO_MAX_ANGLE = 180.0;
 }
 
 #endif //DISTILLERY_CONTROLLER_HARDWARE_H
