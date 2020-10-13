@@ -25,6 +25,7 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 
+#include "images/still.h"
 #include "Hardware.h"
 #include "Settings.h"
 #include "Button.h"
@@ -51,6 +52,28 @@ uint8_t servoAngle = 0;
 
 Servo servo;
 Adafruit_SSD1306 lcd;
+
+void draw_packed_image(uint8_t xOffset, uint8_t yOffset)
+{
+    for (auto y = 0; y < images::STILL_HEIGHT; ++y)
+    {
+        for (auto x = 0; x < images::STILL_WIDTH; ++x)
+        {
+            auto bitOffset = (y * images::STILL_WIDTH) + x;
+
+            auto byteIndex = (int)floor(bitOffset / 8.0);
+            auto bitIndex = bitOffset % 8;
+            auto& currentValue = images::still[byteIndex];
+
+            if ((currentValue & (1 << bitIndex)) == 0)
+            {
+                continue;
+            }
+
+            lcd.drawPixel(x + xOffset, y + yOffset, WHITE);
+        }
+    }
+}
 
 void setup()
 {
@@ -100,6 +123,16 @@ void loop()
     }
 
     servo.write(servoAngle);
+
+    //
+
+    lcd.fillRect(0, 4, 4, 12, WHITE);
+
+    draw_packed_image
+    (
+        hardware::LCD_WIDTH - images::STILL_WIDTH - 8,
+        hardware::LCD_HEIGHT - images::STILL_HEIGHT - 8
+    );
 
     lcd.display();
 }
