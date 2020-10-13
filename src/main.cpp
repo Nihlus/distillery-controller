@@ -130,14 +130,21 @@ void loop()
             servoAngle = buttonAngles[i];
         }
     }
+
     servo.write(servoAngle);
+
+    auto potValue = analogRead(hardware::POTENTIOMETER_PIN);
 
     //
 
     yellow.setCursor(0, 0);
     yellow.setTextColor(WHITE);
+
     yellow.print("Angle: ");
-    yellow.print(servoAngle);
+    yellow.println(servoAngle);
+
+    yellow.print("Potentiometer: ");
+    yellow.println(potValue);
 
     draw_packed_image
     (
