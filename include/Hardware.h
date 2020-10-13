@@ -95,12 +95,12 @@ namespace hardware
     /**
      * Defines the lower bound of the pulse width for the servo.
      */
-    constexpr microseconds_t SERVO_MIN_PULSE_WIDTH = 650;
+    constexpr microseconds_t SERVO_MIN_PULSE_WIDTH = 750;
 
     /**
      * Defines the upper bound of the pulse width for the servo.
      */
-    constexpr microseconds_t SERVO_MAX_PULSE_WIDTH = 2550;
+    constexpr microseconds_t SERVO_MAX_PULSE_WIDTH = 2650;
 
     /**
      * Defines the minimum angle the servo can reach.
