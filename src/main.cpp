@@ -24,6 +24,7 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
+#include <Screen.h>
 
 #include "images/still.h"
 #include "Hardware.h"
@@ -51,10 +52,19 @@ uint8_t buttonAngles[] =
 uint8_t servoAngle = 0;
 
 Servo servo;
-Adafruit_SSD1306 lcd;
+Screen screen = Screen
+(
+    hardware::LCD_DATA_PIN,
+    hardware::LCD_CLOCK_PIN,
+    hardware::LCD_I2C_ADDRESS,
+    hardware::LCD_WIDTH,
+    hardware::LCD_HEIGHT
+);
 
 void draw_packed_image(uint8_t xOffset, uint8_t yOffset)
 {
+    auto& blue = screen.getBlueZone();
+
     for (auto y = 0; y < images::STILL_HEIGHT; ++y)
     {
         for (auto x = 0; x < images::STILL_WIDTH; ++x)
@@ -70,7 +80,7 @@ void draw_packed_image(uint8_t xOffset, uint8_t yOffset)
                 continue;
             }
 
-            lcd.drawPixel(x + xOffset, y + yOffset, WHITE);
+            blue.drawPixel(x + xOffset, y + yOffset, WHITE);
         }
     }
 }
@@ -95,29 +105,27 @@ void setup()
     // Start at 0 degrees
     servo.write(servoAngle);
 
-    // Initialize the LCD
-    lcd = Adafruit_SSD1306(hardware::LCD_WIDTH, hardware::LCD_HEIGHT, &Wire, -1);
-    lcd.begin(SSD1306_SWITCHCAPVCC, hardware::LCD_I2C_ADDRESS);
-
-    lcd.clearDisplay();
-    lcd.setTextColor(WHITE, BLACK);
+    screen.initialize();
 }
 
 void loop()
 {
-    lcd.clearDisplay();
+    screen.clear();
+    auto& blue = screen.getBlueZone();
+    auto& yellow = screen.getYellowZone();
+
     for (auto i = 0; i < lengthof(buttons); ++i)
     {
         auto& button = buttons[i];
 
         auto circleX = i * 12 + 8;
-        auto circleY = 24;
+        auto circleY = 12;
 
-        lcd.drawCircle(circleX, circleY, 4, WHITE);
+        blue.drawCircle(circleX, circleY, 4, WHITE);
 
         if (button.isPressed())
         {
-            lcd.fillCircle(circleX, circleY, 2, WHITE);
+            blue.fillCircle(circleX, circleY, 2, WHITE);
             servoAngle = buttonAngles[i];
         }
     }
@@ -126,13 +134,13 @@ void loop()
 
     //
 
-    lcd.fillRect(0, 4, 4, 12, WHITE);
+    yellow.fillRect(0, 4, 4, 12, WHITE);
 
     draw_packed_image
     (
-        hardware::LCD_WIDTH - images::STILL_WIDTH - 8,
-        hardware::LCD_HEIGHT - images::STILL_HEIGHT - 8
+        blue.width() - images::STILL_WIDTH - 8,
+        blue.height() - images::STILL_HEIGHT - 8
     );
 
-    lcd.display();
+    screen.display();
 }
