@@ -73,7 +73,8 @@ void draw_packed_image(uint8_t xOffset, uint8_t yOffset)
 
             auto byteIndex = (int)floor(bitOffset / 8.0);
             auto bitIndex = bitOffset % 8;
-            auto& currentValue = images::still[byteIndex];
+
+            auto currentValue = pgm_read_byte(&images::still[byteIndex]);
 
             if ((currentValue & (1 << bitIndex)) == 0)
             {
@@ -129,12 +130,14 @@ void loop()
             servoAngle = buttonAngles[i];
         }
     }
-
     servo.write(servoAngle);
 
     //
 
-    yellow.fillRect(0, 4, 4, 12, WHITE);
+    yellow.setCursor(0, 0);
+    yellow.setTextColor(WHITE);
+    yellow.print("Angle: ");
+    yellow.print(servoAngle);
 
     draw_packed_image
     (
