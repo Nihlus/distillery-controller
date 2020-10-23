@@ -49,7 +49,7 @@ uint8_t buttonAngles[] =
     settings::BUTTON_4_ANGLE,
 };
 
-uint8_t servoAngle = 0;
+uint8_t servoAngle = settings::BUTTON_1_ANGLE;
 
 Servo servo;
 Screen screen = Screen
