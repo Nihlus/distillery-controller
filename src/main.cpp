@@ -49,7 +49,15 @@ uint8_t buttonAngles[] =
     settings::BUTTON_4_ANGLE,
 };
 
-uint8_t servoAngle = settings::BUTTON_1_ANGLE;
+bool wasButtonPressed[] =
+{
+    false,
+    false,
+    false,
+    false
+};
+
+double servoAngle = settings::BUTTON_1_ANGLE;
 
 Servo servo;
 Screen screen = Screen
@@ -104,7 +112,7 @@ void setup()
     );
 
     // Start at 0 degrees
-    servo.write(servoAngle);
+    servo.write((int32_t)servoAngle);
 
     screen.initialize();
 }
@@ -115,7 +123,7 @@ void loop()
     auto& blue = screen.getBlueZone();
     auto& yellow = screen.getYellowZone();
 
-    for (auto i = 0; i < lengthof(buttons); ++i)
+    for (auto i = 0u; i < lengthof(buttons); ++i)
     {
         auto& button = buttons[i];
 
@@ -127,11 +135,58 @@ void loop()
         if (button.isPressed())
         {
             blue.fillCircle(circleX, circleY, 2, WHITE);
-            servoAngle = buttonAngles[i];
+
+            if (wasButtonPressed[i])
+            {
+                continue;
+            }
+
+            switch(i)
+            {
+                case 0:
+                case 3:
+                {
+                    servoAngle = buttonAngles[i];
+                    break;
+                }
+                case 1:
+                {
+                    servoAngle += buttonAngles[i];
+                    servoAngle = servoAngle > hardware::SERVO_MAX_ANGLE
+                        ? hardware::SERVO_MAX_ANGLE
+                        : servoAngle;
+
+                    break;
+                }
+                case 2:
+                {
+                    servoAngle -= buttonAngles[i];
+                    servoAngle = servoAngle < hardware::SERVO_MIN_ANGLE
+                        ? hardware::SERVO_MIN_ANGLE
+                        : servoAngle;
+
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+
+            wasButtonPressed[i] = true;
+        }
+        else
+        {
+            if (!wasButtonPressed[i])
+            {
+                continue;
+            }
+
+            wasButtonPressed[i] = false;
         }
     }
 
-    servo.write(servoAngle);
+    servo.write((int32_t)servoAngle);
 
     auto potValue = analogRead(hardware::POTENTIOMETER_PIN);
 

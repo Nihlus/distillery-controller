@@ -33,14 +33,14 @@ namespace settings
     constexpr uint8_t BUTTON_1_ANGLE = 0;
 
     /**
-     * Defines the angle the second button should set the servo to.
+     * Defines the angle the second button should add to the current angle of the servo.
      */
-    constexpr uint8_t BUTTON_2_ANGLE = 45;
+    constexpr uint8_t BUTTON_2_ANGLE = 2;
 
     /**
-     * Defines the angle the third button should set the servo to.
+     * Defines the angle the second button should remove from the current angle of the servo.
      */
-    constexpr uint8_t BUTTON_3_ANGLE = 90;
+    constexpr uint8_t BUTTON_3_ANGLE = 2;
 
     /**
      * Defines the angle the fourth button should set the servo to.
