@@ -24,6 +24,7 @@
 #define DISTILLERY_CONTROLLER_HARDWARE_H
 
 #include <stdint.h>
+#include <pins_arduino.h>
 
 namespace hardware
 {
@@ -111,6 +112,11 @@ namespace hardware
      * Defines the maximum angle the servo can reach.
      */
     constexpr double SERVO_MAX_ANGLE = 180.0;
+
+    /**
+     * Defines the delay between checks for debouncing.
+     */
+    constexpr uint8_t DEBOUNCE_DELAY = 50;
 }
 
 #endif //DISTILLERY_CONTROLLER_HARDWARE_H

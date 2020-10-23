@@ -24,6 +24,7 @@
 #define DISTILLERY_CONTROLLER_BUTTON_H
 
 #include <stdint.h>
+#include <Debounce.h>
 
 /**
  * Represents a button.
@@ -31,7 +32,7 @@
 class Button
 {
     /**
-     * Holds the pin that the button should use.
+     * Holds the button pin.
      */
     uint8_t _buttonPin;
 
@@ -39,6 +40,11 @@ class Button
      * Holds a value indicating whether the button is connected to a pull-up resistor.
      */
     bool _isPullUp;
+
+    /**
+     * Holds the debounced button wrapper.
+     */
+    Debounce _debouncedButton;
 
     /**
      * Holds a value indicating whether the internal pull-up resistor should be used.
@@ -63,7 +69,7 @@ public:
      * Determines whether the button is currently pressed.
      * @return true if the button is pressed, otherwise, false.
      */
-    bool isPressed() const;
+    bool isPressed();
 };
 
 #endif //DISTILLERY_CONTROLLER_BUTTON_H

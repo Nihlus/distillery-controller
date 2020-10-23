@@ -21,12 +21,14 @@
 //
 
 #include "Button.h"
+#include "Hardware.h"
 
 #include <Arduino.h>
 
 Button::Button(uint8_t pin, bool isPullUp, bool useInternalPullUp) noexcept :
     _buttonPin(pin),
     _isPullUp(isPullUp),
+    _debouncedButton(_buttonPin, hardware::DEBOUNCE_DELAY, false, _isPullUp),
     _useInternalPullUp(useInternalPullUp)
 {
     if (_useInternalPullUp)
@@ -35,20 +37,21 @@ Button::Button(uint8_t pin, bool isPullUp, bool useInternalPullUp) noexcept :
     }
 }
 
-bool Button::isPressed() const
+bool Button::isPressed()
 {
-    auto value = digitalRead(_buttonPin);
+    _debouncedButton.resetCount();
+    auto value = _debouncedButton.read();
 
     return _isPullUp
-        ? value == 0
-        : value == 1;
+        ? value == LOW
+        : value == HIGH;
 }
 
 void Button::initialize() const noexcept
 {
     auto mode = _useInternalPullUp
-                ? INPUT_PULLUP
-                : INPUT;
+        ? INPUT_PULLUP
+        : INPUT;
 
     pinMode(_buttonPin, mode);
 }
