@@ -127,14 +127,14 @@ void loop()
     {
         auto& button = buttons[i];
 
-        auto circleX = i * 12 + 8;
-        auto circleY = 12;
+        auto circleX = i * 12 + 28;
+        auto circleY = 40;
 
-        blue.drawCircle(circleX, circleY, 4, WHITE);
+        blue.drawCircle(circleX, circleY, 5, WHITE);
 
         if (button.isPressed())
         {
-            blue.fillCircle(circleX, circleY, 2, WHITE);
+            blue.fillCircle(circleX, circleY, 4, WHITE);
 
             if (wasButtonPressed[i])
             {
@@ -195,11 +195,14 @@ void loop()
     yellow.setCursor(0, 0);
     yellow.setTextColor(WHITE);
 
-    yellow.print("Angle: ");
-    yellow.println(servoAngle);
+    // blue.setCursor(0, 20);
+    // blue.setTextColor(WHITE);
 
-    yellow.print("Potentiometer: ");
-    yellow.println(potValue);
+    yellow.print("Angle: ");
+    yellow.println((uint8_t)servoAngle);
+
+    //yellow.print("Potentiometer: ");
+    //yellow.println(potValue);
 
     draw_packed_image
     (

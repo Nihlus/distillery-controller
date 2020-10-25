@@ -111,7 +111,7 @@ namespace hardware
     /**
      * Defines the maximum angle the servo can reach.
      */
-    constexpr double SERVO_MAX_ANGLE = 180.0;
+    constexpr double SERVO_MAX_ANGLE = 90.0;
 
     /**
      * Defines the delay between checks for debouncing.
