@@ -36,28 +36,33 @@
 
                             //Ntc givare
 // which analog pin to connect
-#define NTC1THERMISTORPIN A0 
-#define NTC2THERMISTORPIN A1        
+#define NTC1THERMISTORPIN A0
+#define NTC2THERMISTORPIN A1
 // resistance at 25 degrees C
-#define THERMISTORNOMINAL 10000      
+#define THERMISTORNOMINAL 10000
 // temp. for nominal resistance (almost always 25 C)
-#define TEMPERATURENOMINAL 25   
+#define TEMPERATURENOMINAL 25
 // how many samples to take and average, more takes longer
 // but is more 'smooth'
 #define NUMSAMPLES 5
 // The beta coefficient of the thermistor (usually 3000-4000)
 #define BCOEFFICIENT 3950
 // the value of the 'other' resistor
-#define SERIESRESISTOR 10000    
- 
+#define SERIESRESISTOR 10000
+
 //    pinmode (A1,INPUT)
 int samples[NUMSAMPLES];
                         //Ntc stop
 
-    //leds
+/*    //leds
 int LED_GREEN = 6;
 int LED_RED = 7;
 int LED_YELLOW = 8;
+*/
+
+#define LED_GREEN 6
+#define LED_RED 7
+#define LED_YELLOW 8
 
     //ntctemp
 float NTC1_TEMP = 0;
@@ -147,15 +152,15 @@ void setup()
     servo.write((int32_t)servoAngle);
 
     screen.initialize();
-    
+
     //Ntc 3.3v med ref
     // analogReference(EXTERNAL);
-    
+
     //led
     pinMode(6, OUTPUT);
     pinMode(7, OUTPUT);
     pinMode(8, OUTPUT);
-    
+
 }
 
 void loop()
@@ -164,7 +169,7 @@ void loop()
     auto& blue = screen.getBlueZone();
     auto& yellow = screen.getYellowZone();
 
- 
+
 
 
     for (auto i = 0u; i < lengthof(buttons); ++i)
@@ -232,23 +237,23 @@ void loop()
 
 
 
-  
+
       servo.write((int32_t)servoAngle);
 
-    
-   
+
+
  //Ntc1
-  
+
   float reading;
   uint8_t i;
   float average;
- 
+
   // take N samples in a row, with a slight delay
   for (i=0; i< NUMSAMPLES; i++) {
    samples[i] = analogRead(NTC1THERMISTORPIN);
    //delay(10);
   }
-  
+
   // average all the samples out
   average = 0;
   for (i=0; i< NUMSAMPLES; i++) {
@@ -259,7 +264,7 @@ void loop()
     // convert the value to resistance
   average = 1023 / average - 1;
   average = SERIESRESISTOR / average;
-  
+
   float steinhart;
   steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
   steinhart = log(steinhart);                  // ln(R/Ro)
@@ -272,12 +277,12 @@ void loop()
     {
     NTC1_TEMP = steinhart;
     }
-   
+
     if (steinhart < NTC1_TEMP - 0.1)
     {
     NTC1_TEMP = steinhart;
     }
-    
+
     //temp angle
 
     if (NTC1_TEMP > 25)
@@ -290,13 +295,13 @@ void loop()
 //  float reading;
 //  uint8_t i;
 //  float average;
- 
+
   // take N samples in a row, with a slight delay
   for (i=0; i< NUMSAMPLES; i++) {
    samples[i] = analogRead(NTC2THERMISTORPIN);
    //delay(10);
   }
-  
+
   // average all the samples out
   average = 0;
   for (i=0; i< NUMSAMPLES; i++) {
@@ -308,7 +313,7 @@ void loop()
     // convert the value to resistance
   average = 1023 / average - 1;
   average = SERIESRESISTOR / average;
-  
+
 //  float steinhart;
   steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
   steinhart = log(steinhart);                  // ln(R/Ro)
@@ -321,15 +326,15 @@ void loop()
     {
     NTC2_TEMP = steinhart;
     }
-   
+
     if (steinhart < NTC2_TEMP - 0.1)
     {
     NTC2_TEMP = steinhart;
     }
-    
+
 
  //  led
-    
+
     if (buttons[0].isPressed())
     {
     digitalWrite(LED_RED, HIGH);
@@ -341,11 +346,11 @@ void loop()
 
     // set servo
 
-    servo.write((int32_t)servoAngle);  
+    servo.write((int32_t)servoAngle);
 
 
     // draw the screen
-    
+
     yellow.setCursor(0, 0);
     yellow.setTextColor(WHITE);
     //yellow.setTextSize(0,0);
@@ -355,12 +360,12 @@ void loop()
 
     yellow.print("Angle ");
     yellow.print("Ntc1 ");
-    yellow.print("Ntc2 "); 
+    yellow.print("Ntc2 ");
     yellow.setCursor(8,9);
-    yellow.print((uint8_t)servoAngle);      
-    yellow.setCursor(37,9);    
+    yellow.print((uint8_t)servoAngle);
+    yellow.setCursor(37,9);
     yellow.print((NTC1_TEMP), 1);
-    yellow.setCursor(67,9);    
+    yellow.setCursor(67,9);
     yellow.print((NTC2_TEMP), 1);
 
     draw_packed_image
