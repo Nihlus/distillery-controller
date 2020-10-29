@@ -35,10 +35,6 @@
 
 #define lengthof(a) sizeof(a) / sizeof(a[0])
 
-// which analog pin to connect
-#define NTC1THERMISTORPIN A0
-#define NTC2THERMISTORPIN A1
-
 #define LED_GREEN 6
 #define LED_RED 7
 #define LED_YELLOW 8
@@ -79,8 +75,8 @@ Screen screen = Screen
     hardware::LCD_HEIGHT
 );
 
-Thermistor ntc1 = Thermistor(NTC1THERMISTORPIN);
-Thermistor ntc2 = Thermistor(NTC2THERMISTORPIN);
+Thermistor ntc1 = Thermistor(hardware::THERMISTOR_1_PIN);
+Thermistor ntc2 = Thermistor(hardware::THERMISTOR_2_PIN);
 
 void draw_packed_image(uint8_t xOffset, uint8_t yOffset)
 {
@@ -139,7 +135,6 @@ void setup()
     pinMode(6, OUTPUT);
     pinMode(7, OUTPUT);
     pinMode(8, OUTPUT);
-
 }
 
 void loop()

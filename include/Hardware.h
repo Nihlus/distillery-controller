@@ -117,6 +117,16 @@ namespace hardware
      * Defines the delay between checks for debouncing.
      */
     constexpr uint8_t DEBOUNCE_DELAY = 50;
+
+    /**
+     * Defines the pin for thermistor 1.
+     */
+    constexpr uint8_t THERMISTOR_1_PIN = A0;
+
+    /**
+     * Defines the pin for thermistor 2.
+     */
+    constexpr uint8_t THERMISTOR_2_PIN = A1;
 }
 
 #endif //DISTILLERY_CONTROLLER_HARDWARE_H
