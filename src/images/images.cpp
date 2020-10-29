@@ -44,7 +44,8 @@ void images::draw_packed_image
             auto byteIndex = (int)floor(bitOffset / 8.0);
             auto bitIndex = bitOffset % 8;
 
-            auto currentValue = pgm_read_byte(data[byteIndex]);
+            auto addressOffset = data + byteIndex;
+            auto currentValue = pgm_read_byte(addressOffset);
 
             if ((currentValue & (1 << bitIndex)) == 0)
             {
