@@ -90,7 +90,7 @@ void Program::loop()
     auto& yellow = _screen.getYellowZone();
 
     auto servoAngle = _servo.read();
-    bool wasButtonPressed[4];
+    bool wasButtonPressed[4] = { };
     if (_button1.isPressed())
     {
         servoAngle = settings::BUTTON_1_ANGLE;
