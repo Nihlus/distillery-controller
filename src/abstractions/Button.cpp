@@ -20,10 +20,10 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "Button.h"
-#include "Hardware.h"
-
 #include <Arduino.h>
+
+#include "abstractions/Button.h"
+#include "configuration/Hardware.h"
 
 Button::Button(uint8_t pin, bool isPullUp, bool useInternalPullUp) noexcept :
     _buttonPin(pin),

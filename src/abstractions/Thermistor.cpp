@@ -20,8 +20,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "Thermistor.h"
 #include <Arduino.h>
+
+#include "abstractions/Thermistor.h"
 
 Thermistor::Thermistor
 (

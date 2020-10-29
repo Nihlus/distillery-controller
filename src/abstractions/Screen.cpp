@@ -22,7 +22,7 @@
 
 #include <Wire.h>
 
-#include "Screen.h"
+#include "abstractions/Screen.h"
 
 Screen::Screen(uint8_t dataPin, uint8_t clockPin, uint8_t i2cAddress, uint8_t width, uint8_t height) noexcept :
     _dataPin(dataPin),

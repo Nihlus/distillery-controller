@@ -23,9 +23,8 @@
 #include <Arduino.h>
 
 #include "Program.h"
-#include "Hardware.h"
-#include "Settings.h"
-
+#include "configuration/Hardware.h"
+#include "configuration/Settings.h"
 #include "images/images.h"
 
 using namespace distillery;

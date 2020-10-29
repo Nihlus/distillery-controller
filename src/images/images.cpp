@@ -20,8 +20,9 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "images/images.h"
 #include <Adafruit_SSD1306.h>
+
+#include "images/images.h"
 
 using namespace images;
 

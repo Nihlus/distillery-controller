@@ -24,9 +24,9 @@
 #define DISTILLERY_CONTROLLER_PROGRAM_H
 
 #include <Servo.h>
-#include "Button.h"
-#include "Thermistor.h"
-#include "Screen.h"
+#include "abstractions/Button.h"
+#include "abstractions/Thermistor.h"
+#include "abstractions/Screen.h"
 
 namespace distillery
 {
