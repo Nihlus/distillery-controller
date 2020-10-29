@@ -30,7 +30,7 @@ namespace settings
     /**
      * Defines the angle the first button should set the servo to.
      */
-    constexpr uint8_t BUTTON_1_ANGLE = 90;
+    constexpr uint8_t BUTTON_1_ANGLE = 10;
 
     /**
      * Defines the angle the second button should add to the current angle of the servo.
@@ -45,7 +45,13 @@ namespace settings
     /**
      * Defines the angle the fourth button should set the servo to.
      */
-    constexpr uint8_t BUTTON_4_ANGLE = 0;
+    constexpr uint8_t BUTTON_4_ANGLE = 80;
+
+    // Led colors
+    constexpr uint8_t LED_GREEN = 6;
+    constexpr uint8_t LED_RED = 7;
+    constexpr uint8_t LED_YELLOW = 8;
+
 }
 
 #endif //DISTILLERY_CONTROLLER_SETTINGS_H
