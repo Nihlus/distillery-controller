@@ -1,5 +1,5 @@
 //
-//  main.cpp
+//  images.cpp
 //
 //  Author:
 //       Jarl Gullberg <jarl.gullberg@gmail.com>
@@ -20,16 +20,38 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "main.h"
+#include "images/images.h"
+#include <Adafruit_SSD1306.h>
 
-using namespace distillery;
+using namespace images;
 
-void setup()
+void images::draw_packed_image
+(
+    Adafruit_GFX& gfx,
+    uint8_t xOffset,
+    uint8_t yOffset,
+    uint8_t width,
+    uint8_t height,
+    const uint8_t* data
+) noexcept
 {
-    program.setup();
-}
+    for (auto y = 0; y < height; ++y)
+    {
+        for (auto x = 0; x < width; ++x)
+        {
+            auto bitOffset = (y * width) + x;
 
-void loop()
-{
-    program.loop();
+            auto byteIndex = (int)floor(bitOffset / 8.0);
+            auto bitIndex = bitOffset % 8;
+
+            auto currentValue = pgm_read_byte(data[byteIndex]);
+
+            if ((currentValue & (1 << bitIndex)) == 0)
+            {
+                continue;
+            }
+
+            gfx.drawPixel(x + xOffset, y + yOffset, WHITE);
+        }
+    }
 }

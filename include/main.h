@@ -1,5 +1,5 @@
 //
-//  main.cpp
+//  main.h
 //
 //  Author:
 //       Jarl Gullberg <jarl.gullberg@gmail.com>
@@ -20,16 +20,18 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "main.h"
+#ifndef DISTILLERY_CONTROLLER_MAIN_H
+#define DISTILLERY_CONTROLLER_MAIN_H
 
-using namespace distillery;
+#include "Program.h"
 
-void setup()
+/**
+ * Holds the main program instance;
+ */
+namespace distillery
 {
-    program.setup();
+    Program program;
 }
 
-void loop()
-{
-    program.loop();
-}
+
+#endif //DISTILLERY_CONTROLLER_MAIN_H

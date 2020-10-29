@@ -20,10 +20,11 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef DISTILLERY_CONTROLLER_STILL_H
-#define DISTILLERY_CONTROLLER_STILL_H
+#ifndef DISTILLERY_CONTROLLER_IMAGES_H
+#define DISTILLERY_CONTROLLER_IMAGES_H
 
 #include <stdint.h>
+#include <Adafruit_GFX.h>
 
 namespace images
 {
@@ -42,6 +43,16 @@ namespace images
         0x81, 0x1, 0x40, 0x40, 0x1, 0x1, 0x3C, 0x50, 0x81, 0x7, 0x4, 0x54, 0x1, 0x1, 0x2,
         0x54, 0x80, 0x0, 0x1, 0x14, 0x40, 0x70, 0x0, 0xE, 0xC0, 0x1, 0x0, 0x0, 0x0, 0x0,
     };
+
+    void draw_packed_image
+    (
+        Adafruit_GFX& gfx,
+        uint8_t xOffset,
+        uint8_t yOffset,
+        uint8_t width,
+        uint8_t height,
+        const uint8_t* data
+    );
 }
 
-#endif //DISTILLERY_CONTROLLER_STILL_H
+#endif //DISTILLERY_CONTROLLER_IMAGES_H
