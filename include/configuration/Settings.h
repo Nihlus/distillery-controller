@@ -30,22 +30,22 @@ namespace settings
     /**
      * Defines the angle the first button should set the servo to.
      */
-    constexpr uint8_t BUTTON_1_ANGLE = 10;
+    constexpr uint8_t CLOSE_ANGLE = 0;
 
     /**
      * Defines the angle the second button should add to the current angle of the servo.
      */
-    constexpr uint8_t BUTTON_2_ANGLE = 2;
+    //constexpr uint8_t BUTTON_2_ANGLE = 2;
 
     /**
      * Defines the angle the second button should remove from the current angle of the servo.
      */
-    constexpr uint8_t BUTTON_3_ANGLE = 2;
+    //constexpr uint8_t BUTTON_3_ANGLE = 2;
 
     /**
      * Defines the angle the fourth button should set the servo to.
      */
-    constexpr uint8_t BUTTON_4_ANGLE = 80;
+    //constexpr uint8_t BUTTON_4_ANGLE = 80;
 
     // Led colors
     constexpr uint8_t LED_GREEN = 6;

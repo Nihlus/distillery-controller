@@ -65,6 +65,10 @@ void Program::setup()
     //pinMode(hardware::POTENTIOMETER_PIN, INPUT);
     pinMode(hardware::SERVO_PIN, OUTPUT);
 
+    pinMode(LED_GREEN, OUTPUT);
+    pinMode(LED_RED, OUTPUT);
+    pinMode(LED_YELLOW, OUTPUT);
+
     _servo.attach
     (
         hardware::SERVO_PIN,
@@ -72,14 +76,17 @@ void Program::setup()
         hardware::SERVO_MAX_PULSE_WIDTH
     );
 
-    // Start the servo at the default angle.
-    _servo.write(0);
+    // Start the servo at the close angle.
+    _servo.write(settings::CLOSE_ANGLE);
 
     _screen.initialize();
 
-    pinMode(LED_GREEN, OUTPUT);
-    pinMode(LED_RED, OUTPUT);
-    pinMode(LED_YELLOW, OUTPUT);
+    // eriks lekstuga
+
+    bool column_check = false;
+    bool column_hot = false;    
+    digitalWrite(LED_YELLOW, HIGH);
+
 }
 
 void Program::loop()
@@ -88,14 +95,16 @@ void Program::loop()
     auto& blue = _screen.getBlueZone();
     auto& yellow = _screen.getYellowZone();
 
+    _ntc1.resampleTemperature();
+    _ntc2.resampleTemperature();
+
     auto servoAngle = _servo.read();
     bool wasButtonPressed[4] = { };
+    
     if (_button1.isPressed())
     {
-        servoAngle = settings::BUTTON_1_ANGLE;
-        wasButtonPressed[0] = true;
-
         digitalWrite(LED_RED, HIGH);
+        wasButtonPressed[0] = true;
     }
     else
     {
@@ -104,19 +113,23 @@ void Program::loop()
 
     if (_button2.isPressed())
     {
-        servoAngle = settings::BUTTON_2_ANGLE;
+        servoAngle = servoAngle +1;
         wasButtonPressed[1] = true;
     }
 
     if (_button3.isPressed())
     {
-        servoAngle = settings::BUTTON_3_ANGLE;
+        servoAngle = servoAngle -1;
         wasButtonPressed[2] = true;
     }
 
     if (_button4.isPressed())
     {
-        servoAngle = settings::BUTTON_4_ANGLE;
+        column_check = true
+        digitalWrite(LED_RED, LOW);
+        digitalWrite(LED_YELLOW, LOW);
+        digitalWrite(LED_GREEN, HIGH);
+                
         wasButtonPressed[3] = true;
     }
 
@@ -132,10 +145,7 @@ void Program::loop()
         }
     }
 
-    _servo.write((int32_t)servoAngle);
-
-    _ntc1.resampleTemperature();
-    _ntc2.resampleTemperature();
+    
 
     // set servo
     _servo.write((int32_t)servoAngle);
