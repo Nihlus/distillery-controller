@@ -25,11 +25,12 @@
 #include "abstractions/Button.h"
 #include "configuration/Hardware.h"
 
-Button::Button(uint8_t pin, bool isPullUp, bool useInternalPullUp) noexcept :
+Button::Button(uint8_t pin, bool isOneShot, bool isPullUp, bool useInternalPullUp) noexcept :
     _buttonPin(pin),
     _isPullUp(isPullUp),
     _debouncedButton(_buttonPin, hardware::DEBOUNCE_DELAY, false, _isPullUp),
-    _useInternalPullUp(useInternalPullUp)
+    _useInternalPullUp(useInternalPullUp),
+    _isOneShot(isOneShot)
 {
     if (_useInternalPullUp)
     {
@@ -42,9 +43,22 @@ bool Button::isPressed()
     _debouncedButton.resetCount();
     auto value = _debouncedButton.read();
 
-    return _isPullUp
+    auto isPressed = _isPullUp
         ? value == LOW
         : value == HIGH;
+
+    if (!_isOneShot)
+    {
+        return isPressed;
+    }
+
+    if (isPressed && _wasPressedLastCheck)
+    {
+        return false;
+    }
+
+    _wasPressedLastCheck = isPressed;
+    return isPressed;
 }
 
 void Button::initialize() const noexcept

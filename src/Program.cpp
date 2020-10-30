@@ -31,8 +31,8 @@ using namespace distillery;
 
 distillery::Program::Program() noexcept :
     _button1(hardware::BUTTON_1_PIN),
-    _button2(hardware::BUTTON_2_PIN),
-    _button3(hardware::BUTTON_3_PIN),
+    _button2(hardware::BUTTON_2_PIN, true),
+    _button3(hardware::BUTTON_3_PIN, true),
     _button4(hardware::BUTTON_4_PIN),
     _ntc1(hardware::THERMISTOR_1_PIN),
     _ntc2(hardware::THERMISTOR_2_PIN),
@@ -82,9 +82,6 @@ void Program::setup()
     _screen.initialize();
 
     // eriks lekstuga
-
-    bool column_check = false;
-    bool column_hot = false;    
     digitalWrite(LED_YELLOW, HIGH);
 
 }
@@ -100,7 +97,7 @@ void Program::loop()
 
     auto servoAngle = _servo.read();
     bool wasButtonPressed[4] = { };
-    
+
     if (_button1.isPressed())
     {
         digitalWrite(LED_RED, HIGH);
@@ -125,11 +122,12 @@ void Program::loop()
 
     if (_button4.isPressed())
     {
-        column_check = true
+        _shouldCheckColumnTemperature = true;
+        _isColumnHot = false;
         digitalWrite(LED_RED, LOW);
         digitalWrite(LED_YELLOW, LOW);
         digitalWrite(LED_GREEN, HIGH);
-                
+
         wasButtonPressed[3] = true;
     }
 
@@ -145,7 +143,7 @@ void Program::loop()
         }
     }
 
-    
+
 
     // set servo
     _servo.write((int32_t)servoAngle);

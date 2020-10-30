@@ -72,6 +72,16 @@ namespace distillery
          */
         Screen _screen;
 
+        /**
+         * Holds a value indicating whether the column is currently hot.
+         */
+        bool _isColumnHot = false;
+
+        /**
+         * Holds a value indicating whether the column temperature should be rechecked.
+         */
+        bool _shouldCheckColumnTemperature = false;
+
     public:
         /**
          * Initializes a new instance of the program.

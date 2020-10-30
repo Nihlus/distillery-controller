@@ -51,14 +51,26 @@ class Button
      */
     bool _useInternalPullUp;
 
+    /**
+     * Holds a value indicating whether the button is a one-shot button (that is, if isPressed should only return true
+     * once, even if the button is held.).
+     */
+    bool _isOneShot;
+
+    /**
+     * Holds a value indicating whether the button was pressed the last time it was checked.
+     */
+    bool _wasPressedLastCheck = false;
+
 public:
     /**
      * Initializes a new instance of the Button class.
      * @param pin The pin the button is connected to.
+     * @param isOneShot Whether the button is a one-shot button.
      * @param isPullUp Whether the button is connected to a pull-up resistor.
      * @param useInternalPullUp Whether the internal pull-up resistor should be used.
      */
-    explicit Button(uint8_t pin, bool isPullUp = true, bool useInternalPullUp = true) noexcept;
+    explicit Button(uint8_t pin, bool isOneShot = false, bool isPullUp = true, bool useInternalPullUp = true) noexcept;
 
     /**
      * Initializes the hardware for this button.
