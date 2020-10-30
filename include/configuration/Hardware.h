@@ -116,7 +116,7 @@ namespace hardware
     /**
      * Defines the delay between checks for debouncing.
      */
-    constexpr uint8_t DEBOUNCE_DELAY = 50;
+    constexpr uint8_t DEBOUNCE_DELAY = 25;
 
     /**
      * Defines the pin for thermistor 1.
