@@ -80,9 +80,9 @@ public:
     (
         uint8_t pin,
         uint16_t nominalResistance = 10000,
-        uint16_t nominalTemperature = 25,
-        uint16_t betaCoefficient = 3950,
-        uint16_t seriesResistance = 10000,
+        uint16_t nominalTemperature = 23,
+        uint16_t betaCoefficient = 3982,
+        uint16_t seriesResistance = 1800,
         double temperatureTolerance = 0.1
     ) noexcept;
 
@@ -106,8 +106,9 @@ public:
     /**
      * Resamples the thermistor, updating the current measured temperature.
      * @param sampleCount The number of sampleCount to average.
-     */
-    void resampleTemperature(uint8_t sampleCount = 5) noexcept;
+    */
+ 
+    void resampleTemperature(uint8_t sampleCount = 100) noexcept;
 };
 
 #endif //DISTILLERY_CONTROLLER_THERMISTOR_H

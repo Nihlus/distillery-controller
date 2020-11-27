@@ -81,8 +81,15 @@ namespace distillery
          * Holds a value indicating whether the column temperature should be rechecked.
          */
         bool _shouldCheckColumnTemperature = false;
+        
+        /**
+        * Holds the break temperature of the column
+        */
+        float _columnBreakTemp = 100;
+        float _savetemp = 0;
+        uint8_t _saveangle =0;
 
-    public:
+     public:
         /**
          * Initializes a new instance of the program.
          */

@@ -31,9 +31,10 @@ using namespace distillery;
 
 distillery::Program::Program() noexcept :
     _button1(hardware::BUTTON_1_PIN),
-    _button2(hardware::BUTTON_2_PIN, true),
-    _button3(hardware::BUTTON_3_PIN, true),
-    _button4(hardware::BUTTON_4_PIN),
+//    _button2(hardware::BUTTON_2_PIN, true),
+    _button2(hardware::BUTTON_2_PIN),
+    _button3(hardware::BUTTON_3_PIN),
+    _button4(hardware::BUTTON_4_PIN, true),
     _ntc1(hardware::THERMISTOR_1_PIN),
     _ntc2(hardware::THERMISTOR_2_PIN),
     _servo(),
@@ -83,7 +84,7 @@ void Program::setup()
 
     // eriks lekstuga
     digitalWrite(LED_YELLOW, HIGH);
-
+    
 }
 
 void Program::loop()
@@ -95,9 +96,14 @@ void Program::loop()
     _ntc1.resampleTemperature();
     _ntc2.resampleTemperature();
 
+    float ntc1temp = floor(_ntc1.getCurrentTemperature() * 10 + 0.5) / 10 ;
+    float ntc2temp = floor(_ntc2.getCurrentTemperature() * 10 + 0.5) / 10 - 4;
+    //float ntc1temp = _ntc1.getCurrentTemperature();
+    //double f2 = floor(f1 * 100 + 0.5) / 100.0;
+    
     auto servoAngle = _servo.read();
     bool wasButtonPressed[4] = { };
-
+/*
     if (_button1.isPressed())
     {
         digitalWrite(LED_RED, HIGH);
@@ -107,23 +113,24 @@ void Program::loop()
     {
         digitalWrite(LED_RED, LOW);
     }
-
+*/
     if (_button2.isPressed())
     {
-        servoAngle = servoAngle +1;
+        servoAngle = servoAngle +2;
         wasButtonPressed[1] = true;
     }
 
     if (_button3.isPressed())
     {
-        servoAngle = servoAngle -1;
+        servoAngle = servoAngle -2;
         wasButtonPressed[2] = true;
     }
 
     if (_button4.isPressed())
     {
         _shouldCheckColumnTemperature = true;
-        _isColumnHot = false;
+        //_isColumnHot = false;
+        _columnBreakTemp = (ntc1temp + 0.2);
         digitalWrite(LED_RED, LOW);
         digitalWrite(LED_YELLOW, LOW);
         digitalWrite(LED_GREEN, HIGH);
@@ -131,7 +138,22 @@ void Program::loop()
         wasButtonPressed[3] = true;
     }
 
-    for (auto i = 0; i < 4; ++i)
+    
+    if (_shouldCheckColumnTemperature && ntc1temp > _columnBreakTemp) 
+    {
+        digitalWrite(LED_RED, HIGH);
+        digitalWrite(LED_GREEN, LOW);
+        _savetemp = ntc2temp;
+        _saveangle = servoAngle;
+        servoAngle = (settings::CLOSE_ANGLE);
+
+        _shouldCheckColumnTemperature = false;                
+    
+    } 
+        
+    
+
+        for (auto i = 0; i < 4; ++i)
     {
         auto circleX = i * 12 + 28;
         auto circleY = 40;
@@ -158,10 +180,19 @@ void Program::loop()
     yellow.setCursor(8, 9);
     yellow.print((uint8_t)servoAngle);
     yellow.setCursor(37, 9);
-    yellow.print((_ntc1.getCurrentTemperature()), 1);
+    yellow.print((ntc1temp), 1);
     yellow.setCursor(67, 9);
-    yellow.print((_ntc2.getCurrentTemperature()), 1);
+    yellow.print((ntc2temp), 1);
+    yellow.print(" ");
+    yellow.print(_columnBreakTemp, 1);
+    
+    blue.setCursor(0, 9);
+    blue.setTextColor(WHITE);
 
+    blue.println(_saveangle);
+    blue.println((_savetemp), 1);
+    //blue.print(ntc1temp);
+    
     images::draw_packed_image
     (
         blue,
