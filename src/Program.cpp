@@ -20,6 +20,52 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
+// 1351
+
+
+// Screen dimensions
+#define SCREEN_WIDTH  128
+#define SCREEN_HEIGHT 128 // Change this to 96 for 1.27" OLED.
+
+// You can use any (4 or) 5 pins 
+#define SCLK_PIN 13
+#define MOSI_PIN 11
+#define DC_PIN   9
+#define CS_PIN   10
+#define RST_PIN  8
+
+// Color definitions
+#define	BLACK           0x0000
+#define	BLUE            0x001F
+#define	RED             0xF800
+#define	GREEN           0x07E0
+#define CYAN            0x07FF
+#define MAGENTA         0xF81F
+#define YELLOW          0xFFE0  
+#define WHITE           0xFFFF
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1351.h>
+#include <SPI.h>
+
+// Option 1: use any pins but a little slower
+//Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, CS_PIN, DC_PIN, MOSI_PIN, SCLK_PIN, RST_PIN);  
+
+// Option 2: must use the hardware SPI pins 
+// (for UNO thats sclk = 13 and sid = 11) and pin 10 must be 
+// an output. This is much faster - also required if you want
+// to use the microSD card (see the image drawing example)
+Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, CS_PIN, DC_PIN, RST_PIN);
+
+
+
+// 1351
+
+
+
+
+
 #include <Arduino.h>
 
 #include "Program.h"
@@ -85,11 +131,17 @@ void Program::setup()
     // eriks lekstuga
     digitalWrite(LED_YELLOW, HIGH);
     
+     tft.begin();    
+
+//  tft.fillRect(0, 0, 128, 128, BLACK);
+    tft.fillScreen(BLACK);
 }
 
 void Program::loop()
 {
+//  tft.clearDisplay();    
     _screen.clear();
+//    tft.fillScreen(BLACK);    
     auto& blue = _screen.getBlueZone();
     auto& yellow = _screen.getYellowZone();
 
@@ -171,10 +223,26 @@ void Program::loop()
     _servo.write((int32_t)servoAngle);
 
     // draw the screen
-    yellow.setCursor(0, 0);
-    yellow.setTextColor(WHITE);
+    //yellow.setCursor(0, 0);
+    //yellow.setTextColor(WHITE);
 
-    yellow.print("Angle ");
+//    tft.print("Angle ");
+    
+
+/*    tft.fillScreen(BLACK);
+    tft.setCursor(0, 5);
+    tft.setTextColor(RED);  
+    tft.setTextSize(1);
+    tft.println("Hello World!");
+    tft.setTextColor(YELLOW);
+    tft.setTextSize(2);
+    tft.println("Hello World!");
+    tft.setTextColor(BLUE);
+    tft.setTextSize(3);
+    tft.print(1234.567);
+*/
+
+/*
     yellow.print("Ntc1 ");
     yellow.print("Ntc2 ");
     yellow.setCursor(8, 9);
@@ -193,6 +261,32 @@ void Program::loop()
     blue.println((_savetemp), 1);
     //blue.print(ntc1temp);
     
+*/  
+
+    tft.fillRect(37, 7, 50, 17, RED);
+    tft.setTextSize(2);    
+    tft.setTextColor(GREEN);    
+    
+    tft.setCursor(37, 9);
+    tft.print((ntc1temp), 1);
+//    tft.print("Ntc1 ");
+//    tft.setTextColor(YELLOW);    
+//    tft.print("Ntc2 ");
+//    tft.setCursor(8, 9);
+//    tft.print((uint8_t)servoAngle);
+//    tft.setCursor(67, 9);
+//    tft.print((ntc2temp), 1);
+//    tft.print(" ");
+//    tft.print(_columnBreakTemp, 1);
+    
+//    tft.setCursor(0, 9);
+//    tft.setTextColor(WHITE);
+
+//    tft.println(_saveangle);
+//    tft.println((_savetemp), 1); 
+   //blue.print(ntc1temp);
+
+/*
     images::draw_packed_image
     (
         blue,
@@ -204,4 +298,5 @@ void Program::loop()
     );
 
     _screen.display();
+*/
 }
