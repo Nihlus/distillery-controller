@@ -48,29 +48,16 @@ void Thermistor::initialize() const noexcept
     pinMode(_pin, INPUT);
 }
 
-double Thermistor::getCurrentTemperature() const noexcept
+double Thermistor::getCurrentTemperature() noexcept
 {
-    return _currentTemp;
-}
-
-void Thermistor::resampleTemperature(uint8_t sampleCount) noexcept
-{
-    int samples[sampleCount];
-
-    // take N sampleCount in a row, with a slight delay
-    for (auto& sample : samples)
-    {
-        sample = analogRead(_pin);
-        delay(1);
-    }
-
-    // average all the sampleCount out
+    // average all the samples out
     double average = 0;
-    for (auto& sample : samples)
+    for (auto i = 0; i < _samples.size(); ++i)
     {
-        average += sample;
+        average += _samples[i];
     }
-    average /= sampleCount;
+
+    average /= _samples.size();
 
     // convert the value to resistance
     average = 1023 / average - 1;
@@ -87,14 +74,22 @@ void Thermistor::resampleTemperature(uint8_t sampleCount) noexcept
     auto diff = abs(steinhart - _currentTemp);
     if (diff < _temperatureTolerance)
     {
-        return;
+        // Return the current value without updating it
+        return _currentTemp;
     }
 
+    // Update and return the new temperature
     _currentTemp = steinhart;
+    return _currentTemp;
 }
 
 void Thermistor::setTemperatureTolerance(double temperatureTolerance)
 {
     _temperatureTolerance = temperatureTolerance;
+}
+
+void Thermistor::pushSample() noexcept
+{
+    _samples.push(analogRead(_pin));
 }
 

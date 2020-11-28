@@ -24,12 +24,18 @@
 #define DISTILLERY_CONTROLLER_THERMISTOR_H
 
 #include <stdint.h>
+#include <CircularBuffer.h>
 
 /**
  * Represents a thermistor.
  */
 class Thermistor
 {
+    /**
+     * Holds the default sample count.
+     */
+    static constexpr uint8_t DEFAULT_SAMPLE_COUNT = 100;
+
     /**
      * Holds the pin associated with the thermistor.
      */
@@ -65,6 +71,11 @@ class Thermistor
      */
     double _temperatureTolerance;
 
+    /**
+     * Holds the samples taken by the thermistor.
+     */
+     CircularBuffer<uint32_t, DEFAULT_SAMPLE_COUNT> _samples;
+
 public:
     /**
      * Initializes a new instance of the Thermistor class.
@@ -95,7 +106,7 @@ public:
      * Gets the current measured temperature.
      * @return The current temperature.
      */
-    double getCurrentTemperature() const noexcept;
+    double getCurrentTemperature() noexcept;
 
     /**
      * Sets the temperature tolerance.
@@ -104,11 +115,9 @@ public:
     void setTemperatureTolerance(double temperatureTolerance);
 
     /**
-     * Resamples the thermistor, updating the current measured temperature.
-     * @param sampleCount The number of sampleCount to average.
-    */
- 
-    void resampleTemperature(uint8_t sampleCount = 100) noexcept;
+     * Pushes another new sample into the internal circular sample buffer.
+     */
+    void pushSample() noexcept;
 };
 
 #endif //DISTILLERY_CONTROLLER_THERMISTOR_H

@@ -89,8 +89,8 @@ void Program::loop()
     _screen.clear();
     auto& surface = _screen.getSurface();
 
-    _ntc1.resampleTemperature();
-    _ntc2.resampleTemperature();
+    _ntc1.pushSample();
+    _ntc2.pushSample();
 
     float ntc1temp = floor(_ntc1.getCurrentTemperature() * 10 + 0.5) / 10;
     float ntc2temp = floor(_ntc2.getCurrentTemperature() * 10 + 0.5) / 10 - 4;
