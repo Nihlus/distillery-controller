@@ -69,24 +69,34 @@ namespace hardware
     constexpr uint8_t SERVO_PIN = 5;
 
     /**
-     * Defines the pin for the LCD data.
-     */
-    constexpr uint8_t LCD_DATA_PIN = A4;
-
-    /**
      * Defines the pin for the LCD clock.
      */
-    constexpr uint8_t LCD_CLOCK_PIN = A5;
+    constexpr uint8_t LCD_SCLK_PIN = 13;
 
     /**
-     * Defines the I²C address of the LCD.
+     * Defines the pin for the LCD data.
      */
-    constexpr uint8_t LCD_I2C_ADDRESS = 0x3C;
+    constexpr uint8_t LCD_MOSI_PIN = 11;
+
+    /**
+     * Defines the pin for the LCD DC select.
+     */
+    constexpr uint8_t LCD_DC_PIN = 9;
+
+    /**
+     * Defines the pin for the LCD CS select.
+     */
+    constexpr uint8_t LCD_CS_PIN = 10;
+
+    /**
+     * Defines the pin for the LCD reset pin.
+     */
+    constexpr uint8_t LCD_RST_PIN = 8;
 
     /**
      * Defines the height of the LCD screen.
      */
-    constexpr pixels_t LCD_HEIGHT = 64;
+    constexpr pixels_t LCD_HEIGHT = 128;
 
     /**
      * Defines the height of the LCD screen.

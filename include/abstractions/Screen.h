@@ -24,8 +24,23 @@
 #define DISTILLERY_CONTROLLER_SCREEN_H
 
 #include <stdint.h>
-#include <Adafruit_SSD1306.h>
+#include <Adafruit_SSD1351.h>
 #include <graphics/GraphicsZone.h>
+
+/**
+ * Contains various colours supported by the screen.
+ */
+namespace colours
+{
+    constexpr uint16_t Black = 0x0000;
+    constexpr uint16_t Blue = 0x001F;
+    constexpr uint16_t Red = 0xF800;
+    constexpr uint16_t Green = 0x07E0;
+    constexpr uint16_t Cyan = 0x07FF;
+    constexpr uint16_t Magenta = 0xF81F;
+    constexpr uint16_t Yellow = 0xFFE0;
+    constexpr uint16_t White = 0xFFFF;
+};
 
 /**
  * Represents an abstraction of an LCD screen.
@@ -33,20 +48,29 @@
 class Screen
 {
     /**
-     * Holds the data pin of the LCD screen.
-     */
-    uint8_t _dataPin;
-
-    /**
      * Holds the clock pin of the LCD screen.
      */
-    uint8_t _clockPin;
+    uint8_t _sclkPin;
 
     /**
-     * Holds the I²C address of the screen.
+     * Holds the data pin of the LCD screen.
      */
-    uint8_t _i2cAddress;
+    uint8_t _mosiPin;
 
+    /**
+     * Holds the DC select pin of the LCD screen.
+     */
+    uint8_t _dcPin;
+
+    /**
+     * Holds the CS select pin of the LCD screen.
+     */
+    uint8_t _csPin;
+
+    /**
+     * Holds the reset pin of the LCD screen.
+     */
+    uint8_t _rstPin;
     /**
      * Holds the width of the screen.
      */
@@ -60,55 +84,46 @@ class Screen
     /**
      * Holds the screen driver.
      */
-    Adafruit_SSD1306 _lcd;
-
-    /**
-     * Holds the graphics context for the yellow part of the screen.
-     */
-    GraphicsZone _yellowZone;
-
-    /**
-     * Holds the graphics context for the blue part of the screen.
-     */
-    GraphicsZone _blueZone;
+    Adafruit_SSD1351 _lcd;
 
 public:
     /**
      * Initializes a new instance of the Screen class.
-     * @param dataPin The data pin.
-     * @param clockPin The clock pin.
-     * @param i2cAddress The I²C address.
+     * @param sclkPin The clock pin.
+     * @param mosiPin The data pin.
+     * @param dcPin The DC select pin.
+     * @param csPin The CS select pin.
+     * @param rstPin The reset pin.
      * @param width The width of the screen.
      * @param height The height of the screen.
      */
-    explicit Screen(uint8_t dataPin, uint8_t clockPin, uint8_t i2cAddress, uint8_t width, uint8_t height) noexcept;
+    explicit Screen
+    (
+        uint8_t sclkPin,
+        uint8_t mosiPin,
+        uint8_t dcPin,
+        uint8_t csPin,
+        uint8_t rstPin,
+        uint8_t width,
+        uint8_t height
+    ) noexcept;
 
     /**
-     * Gets a graphics context that wraps the yellow part of the screen.
-     * @return The graphics context.
+     * Gets the drawing surface of the screen.
+     * @return The graphics zone.
      */
-    GraphicsZone& getYellowZone() noexcept;
-
-    /**
-     * Gets a graphics context that wraps the blue part of the screen.
-     * @return The graphics context.
-     */
-    GraphicsZone& getBlueZone() noexcept;
+    Adafruit_GFX& getSurface() noexcept;
 
     /**
      * Initializes the hardware.
+     * @param frequency The clock frequency of the SPI bus. Defaults to a system-optimized value.
      */
-    void initialize();
+    void initialize(uint32_t frequency = 0);
 
     /**
      * Clears the screen.
      */
     void clear();
-
-    /**
-     * Displays the drawn content between the last display call and now.
-     */
-    void display();
 };
 
 #endif //DISTILLERY_CONTROLLER_SCREEN_H

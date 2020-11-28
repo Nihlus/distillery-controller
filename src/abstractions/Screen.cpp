@@ -24,39 +24,38 @@
 
 #include "abstractions/Screen.h"
 
-Screen::Screen(uint8_t dataPin, uint8_t clockPin, uint8_t i2cAddress, uint8_t width, uint8_t height) noexcept :
-    _dataPin(dataPin),
-    _clockPin(clockPin),
-    _i2cAddress(i2cAddress),
+Screen::Screen
+(
+    uint8_t sclkPin,
+    uint8_t mosiPin,
+    uint8_t dcPin,
+    uint8_t csPin,
+    uint8_t rstPin,
+    uint8_t width,
+    uint8_t height
+) noexcept :
+    _sclkPin(sclkPin),
+    _mosiPin(mosiPin),
+    _dcPin(dcPin),
+    _csPin(csPin),
+    _rstPin(rstPin),
     _width(width),
     _height(height),
-    _lcd(_width, _height, &Wire, -1),
-    _yellowZone(_lcd, 0, 0, 128, 12),
-    _blueZone(_lcd, 0, 12, 128, 52)
+    _lcd(_width, _height, &SPI, _csPin, _dcPin, _rstPin)
 {
 }
 
-GraphicsZone& Screen::getYellowZone() noexcept
+void Screen::initialize(uint32_t frequency)
 {
-    return _yellowZone;
-}
-
-GraphicsZone& Screen::getBlueZone() noexcept
-{
-    return _blueZone;
-}
-
-void Screen::initialize()
-{
-    _lcd.begin(SSD1306_SWITCHCAPVCC, _i2cAddress);
+    _lcd.begin(frequency);
 }
 
 void Screen::clear()
 {
-    _lcd.clearDisplay();
+    _lcd.fillScreen(colours::Black);
 }
 
-void Screen::display()
+Adafruit_GFX& Screen::getSurface() noexcept
 {
-    _lcd.display();
+    return _lcd;
 }
