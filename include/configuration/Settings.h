@@ -48,9 +48,9 @@ namespace settings
     //constexpr uint8_t BUTTON_4_ANGLE = 80;
 
     // Led colors
-    constexpr uint8_t LED_GREEN = 6;
-    constexpr uint8_t LED_RED = 7;
-    constexpr uint8_t LED_YELLOW = 8;
+    //constexpr uint8_t LED_GREEN = 6;
+    //constexpr uint8_t LED_RED = 7;
+    //constexpr uint8_t LED_YELLOW = 8;
 
 }
 

@@ -32,8 +32,8 @@ using namespace distillery;
 distillery::Program::Program() noexcept :
     _button1(hardware::BUTTON_1_PIN),
     //    _button2(hardware::BUTTON_2_PIN, true),
-    _button2(hardware::BUTTON_2_PIN),
-    _button3(hardware::BUTTON_3_PIN),
+    _button2(hardware::BUTTON_2_PIN, true),
+    _button3(hardware::BUTTON_3_PIN, true),
     _button4(hardware::BUTTON_4_PIN, true),
     _ntc1(hardware::THERMISTOR_1_PIN),
     _ntc2(hardware::THERMISTOR_2_PIN),
@@ -68,10 +68,11 @@ void Program::setup()
     //pinMode(hardware::POTENTIOMETER_PIN, INPUT);
     pinMode(hardware::SERVO_PIN, OUTPUT);
 
+/*  //define led pins mode
     pinMode(LED_GREEN, OUTPUT);
     pinMode(LED_RED, OUTPUT);
     pinMode(LED_YELLOW, OUTPUT);
-
+*/
     _servo.attach(hardware::SERVO_PIN, hardware::SERVO_MIN_PULSE_WIDTH, hardware::SERVO_MAX_PULSE_WIDTH);
 
     // Start the servo at the close angle.
@@ -81,12 +82,19 @@ void Program::setup()
     _screen.clear();
 
     // eriks lekstuga
-    digitalWrite(LED_YELLOW, HIGH);
+    // digitalWrite(LED_YELLOW, HIGH);
+    auto& surface = _screen.getSurface();    
+    surface.println("Angle ");
+    surface.println("Boiler ");
+    surface.println(" ");
+    surface.println("Angle ");
+    surface.println("Boiler ");    
+    _columnBreakTemp = 99;
 }
 
 void Program::loop()
 {
-    _screen.clear();
+    //_screen.clear();
     auto& surface = _screen.getSurface();
 
     _ntc1.pushSample();
@@ -118,7 +126,7 @@ void Program::loop()
 
     if (_button3.isPressed())
     {
-        servoAngle = servoAngle - 2;
+        servoAngle = servoAngle = 0;
         wasButtonPressed[2] = true;
     }
 
@@ -127,18 +135,13 @@ void Program::loop()
         _shouldCheckColumnTemperature = true;
         //_isColumnHot = false;
         _columnBreakTemp = (ntc1temp + 0.2);
-        digitalWrite(LED_RED, LOW);
-        digitalWrite(LED_YELLOW, LOW);
-        digitalWrite(LED_GREEN, HIGH);
-
+        
         wasButtonPressed[3] = true;
     }
 
 
     if (_shouldCheckColumnTemperature && ntc1temp > _columnBreakTemp)
     {
-        digitalWrite(LED_RED, HIGH);
-        digitalWrite(LED_GREEN, LOW);
         _savetemp = ntc2temp;
         _saveangle = servoAngle;
         servoAngle = (settings::CLOSE_ANGLE);
@@ -147,84 +150,74 @@ void Program::loop()
 
     }
 
+
+    // set servo
+    _servo.write((int32_t)servoAngle);
+
+    // draw the screen
+
+    int ssdx = 45; // x placement int
+    int ssdy = 0; // y placement int   
+
+    
+    // draw values on upper screen
+    surface.fillRect(ssdx, ssdy, 25, 40, colours::Black); //clear screen upper values
+   
+    surface.setTextSize(1);
+    surface.setTextColor(colours::White);
+    
+    surface.setCursor(ssdx, ssdy);    
+    surface.println(servoAngle);
+    
+    surface.setCursor(ssdx, ssdy+8);    
+    surface.print((ntc2temp), 1);
+
+   surface.setCursor(ssdx, ssdy+24);    
+    surface.println(_saveangle);
+    
+    surface.setCursor(ssdx, ssdy+32);    
+    surface.print((_savetemp), 1);
+    
+
+//  Draw a size 2 temp including black clear colum temp
+
+    ssdx = 0; // x placement
+    ssdy = 114; // y placement
+    surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
+    surface.setTextSize(2);
+    surface.setTextColor(colours::Green);
+    surface.setCursor(ssdx, ssdy);
+
+    surface.print((ntc1temp), 1);    // comlum
+
+//  Draw a size 2 temp including black clear boiler temp
+
+    ssdx = 64; // x placement
+    ssdy = 114; // y placement
+    surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
+    surface.setTextSize(2);
+    surface.setTextColor(colours::Red);
+    surface.setCursor(ssdx, ssdy);
+    surface.print((_columnBreakTemp), 1);   //boiler
+
+//  draw button circles
+
     for (auto i = 0; i < 4; ++i)
     {
-        auto circleX = i * 12 + 28;
-        auto circleY = 40;
+        auto circleX = i * 12 + 40;
+        auto circleY = 90;
 
         surface.drawCircle(circleX, circleY, 5, colours::White);
         if (wasButtonPressed[i])
         {
             surface.fillCircle(circleX, circleY, 4, colours::White);
         }
+        else
+        {        
+            surface.fillCircle(circleX, circleY, 4, colours::Black);
+        }
     }
 
-    // set servo
-    _servo.write((int32_t)servoAngle);
-
-    // draw the screen
-    //yellow.setCursor(0, 0);
-    //yellow.setTextColor(WHITE);
-
-//    tft.print("Angle ");
-
-
-/*    tft.fillScreen(BLACK);
-    tft.setCursor(0, 5);
-    tft.setTextColor(RED);
-    tft.setTextSize(1);
-    tft.println("Hello World!");
-    tft.setTextColor(YELLOW);
-    tft.setTextSize(2);
-    tft.println("Hello World!");
-    tft.setTextColor(BLUE);
-    tft.setTextSize(3);
-    tft.print(1234.567);
-*/
-
-/*
-    yellow.print("Ntc1 ");
-    yellow.print("Ntc2 ");
-    yellow.setCursor(8, 9);
-    yellow.print((uint8_t)servoAngle);
-    yellow.setCursor(37, 9);
-    yellow.print((ntc1temp), 1);
-    yellow.setCursor(67, 9);
-    yellow.print((ntc2temp), 1);
-    yellow.print(" ");
-    yellow.print(_columnBreakTemp, 1);
-
-    blue.setCursor(0, 9);
-    blue.setTextColor(WHITE);
-
-    blue.println(_saveangle);
-    blue.println((_savetemp), 1);
-    //blue.print(ntc1temp);
-
-*/
-
-    surface.fillRect(37, 7, 50, 17, colours::Red);
-    surface.setTextSize(2);
-    surface.setTextColor(colours::Green);
-
-    surface.setCursor(37, 9);
-    surface.print((ntc1temp), 1);
-//    tft.print("Ntc1 ");
-//    tft.setTextColor(YELLOW);
-//    tft.print("Ntc2 ");
-//    tft.setCursor(8, 9);
-//    tft.print((uint8_t)servoAngle);
-//    tft.setCursor(67, 9);
-//    tft.print((ntc2temp), 1);
-//    tft.print(" ");
-//    tft.print(_columnBreakTemp, 1);
-
-//    tft.setCursor(0, 9);
-//    tft.setTextColor(WHITE);
-
-//    tft.println(_saveangle);
-//    tft.println((_savetemp), 1);
-    //blue.print(ntc1temp);
 
 /*
     images::draw_packed_image
