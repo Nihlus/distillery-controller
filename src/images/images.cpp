@@ -20,8 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <Adafruit_SSD1306.h>
-
+#include "abstractions/Screen.h"
 #include "images/images.h"
 
 using namespace images;
@@ -53,7 +52,7 @@ void images::draw_packed_image
                 continue;
             }
 
-            gfx.drawPixel(x + xOffset, y + yOffset, WHITE);
+            gfx.drawPixel(x + xOffset, y + yOffset, colours::White);
         }
     }
 }
