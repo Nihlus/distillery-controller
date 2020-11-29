@@ -85,7 +85,7 @@ namespace distillery
         /**
         * Holds the break temperature of the column
         */
-        float _columnBreakTemp = 100;
+        float _columnBreakTemp = 99;
         float _savetemp = 0;
         uint8_t _saveangle =0;
 

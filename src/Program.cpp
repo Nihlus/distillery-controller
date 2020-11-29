@@ -89,7 +89,6 @@ void Program::setup()
     surface.println(" ");
     surface.println("Angle ");
     surface.println("Boiler ");    
-    _columnBreakTemp = 99;
 }
 
 void Program::loop()
@@ -162,20 +161,30 @@ void Program::loop()
     
     // draw values on upper screen
     
-    //surface.fillRect(ssdx, ssdy, 25, 40, colours::Black); //clear screen upper values
-   
     surface.setTextSize(1);
     surface.setTextColor(colours::White,colours::Black);
     
     surface.setCursor(ssdx, ssdy);    
-    surface.println(servoAngle);
+    
+    if (servoAngle < 10)
+    {
+    surface.print(" ");
+    }
+    
+    surface.print(servoAngle);
     
     surface.setCursor(ssdx, ssdy+8);    
     surface.print((ntc2temp), 1);
 
-   surface.setCursor(ssdx, ssdy+24);    
-    surface.println(_saveangle);
+    surface.setCursor(ssdx, ssdy+24);    
     
+    if (_saveangle < 10)
+    {
+    surface.print(" ");
+    }
+    
+    surface.println(_saveangle);
+     
     surface.setCursor(ssdx, ssdy+32);    
     surface.print((_savetemp), 1);
     
