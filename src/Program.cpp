@@ -161,10 +161,11 @@ void Program::loop()
 
     
     // draw values on upper screen
-    surface.fillRect(ssdx, ssdy, 25, 40, colours::Black); //clear screen upper values
+    
+    //surface.fillRect(ssdx, ssdy, 25, 40, colours::Black); //clear screen upper values
    
     surface.setTextSize(1);
-    surface.setTextColor(colours::White);
+    surface.setTextColor(colours::White,colours::Black);
     
     surface.setCursor(ssdx, ssdy);    
     surface.println(servoAngle);
@@ -183,9 +184,9 @@ void Program::loop()
 
     ssdx = 0; // x placement
     ssdy = 114; // y placement
-    surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
+    //surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
     surface.setTextSize(2);
-    surface.setTextColor(colours::Green);
+    surface.setTextColor(colours::Green,colours::Black);
     surface.setCursor(ssdx, ssdy);
 
     surface.print((ntc1temp), 1);    // comlum
@@ -194,9 +195,9 @@ void Program::loop()
 
     ssdx = 64; // x placement
     ssdy = 114; // y placement
-    surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
+    //surface.fillRect(ssdx, ssdy, 46, 14, colours::Black);
     surface.setTextSize(2);
-    surface.setTextColor(colours::Red);
+    surface.setTextColor(colours::Red,colours::Black);
     surface.setCursor(ssdx, ssdy);
     surface.print((_columnBreakTemp), 1);   //boiler
 
